@@ -10,10 +10,9 @@ namespace TestScorePanel
         [Fact]        
         public void TestConstructor()
         {
-            ScoreManager scoreManager = new ScoreManager(new List<MatchResult>());
-            
+            ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
 
-            Assert.True(scoreManager != null && scoreManager.ListMatchResult != null);
+            Assert.True(scoreManager != null && scoreManager.MatchDao.ListMatchResult != null);
         }
 
         [Theory]
@@ -22,12 +21,12 @@ namespace TestScorePanel
         [InlineData("Sevilla", "Barcelona")]
         public void StartGame(string homeName, string awayName)
         {
-            ScoreManager scoreManager = new ScoreManager(new List<MatchResult>());
+            ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
 
             scoreManager.StartGame(homeName, awayName);
 
-            Assert.True(scoreManager != null && scoreManager.ListMatchResult != null && scoreManager.ListMatchResult.Count == 1
-                && scoreManager.ListMatchResult[0].HomeTeam == homeName && scoreManager.ListMatchResult[0].AwayTeam == awayName);
+            Assert.True(scoreManager != null && scoreManager.MatchDao.ListMatchResult != null && scoreManager.MatchDao.ListMatchResult.Count == 1
+                && scoreManager.MatchDao.ListMatchResult[0].HomeTeam == homeName && scoreManager.MatchDao.ListMatchResult[0].AwayTeam == awayName);
         }
 
         //[Theory]

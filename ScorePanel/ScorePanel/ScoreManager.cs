@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScorePanel.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,36 +9,50 @@ namespace ScorePanel
 {
     public class ScoreManager
     {
-        public List<MatchResult> ListMatchResult { get; set; }
+        public MatchDao MatchDao { get; set; }
 
-        public ScoreManager(List<MatchResult> ListMatchResult)
+        public ScoreManager(MatchDao MatchDao)
         {
-            this.ListMatchResult = ListMatchResult;
+            this.MatchDao = MatchDao;
         }
 
         public void StartGame(string home, string away)
         {
-            this.ListMatchResult.Add(new MatchResult(home, away));
+            try
+            {
+                this.MatchDao.StartGame(home, away);
+            }
+            catch (MatchDaoException mex)
+            {
+                throw new Exception("Starting game exception.",mex);
+            }
         }
 
-        public void EndGame(MatchResult game)
+        public void EndGame(MatchManager game)
         {
-            if (this.ListMatchResult.Exists(q => q.HomeTeam == game.HomeTeam && q.AwayTeam == game.AwayTeam))
-                this.ListMatchResult.Remove(game);
+            try
+            {
+                this.MatchDao.EndGame(game);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("End game exception.", ex);
+            }
         }
 
         public void UpdateScore(string home, string away, int homeResult, int awayResult)
         {
-            MatchResult game = this.ListMatchResult.Find(q=>q.HomeTeam == home && q.AwayTeam == away);
-
-            if (game != null)
+            try
             {
-                game.HomeTeamResult = homeResult;
-                game.AwayTeamResult = awayResult;
+                this.MatchDao.UpdateScore(home, away, homeResult, awayResult);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("UpdateScore exception.", ex);
             }
         }
 
-        public List<MatchResult> GetSummary
+        public List<MatchManager> GetSummary
         {
             get
             {

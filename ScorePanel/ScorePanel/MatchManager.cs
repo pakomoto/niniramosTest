@@ -2,7 +2,7 @@
 
 namespace ScorePanel
 {
-    public class MatchResult
+    public class MatchManager
     {
         public string HomeTeam { get; set; }
         public int HomeTeamResult { get; set; }
@@ -11,14 +11,14 @@ namespace ScorePanel
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public MatchResult()
+        public MatchManager()
         {
             this.HomeTeamResult = 0;
             this.AwayTeamResult = 0;
             this.StartDate = DateTime.Now;
         }
 
-        public MatchResult(string HomeTeam, string AwayTeam)
+        public MatchManager(string HomeTeam, string AwayTeam)
             : this()
         {
             this.HomeTeam = HomeTeam;

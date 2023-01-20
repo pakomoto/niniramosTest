@@ -13,7 +13,7 @@ namespace TestScorePanel
         [InlineData("Sevilla", "Barcelona")]
         public void TestConstructor(string homeName, string awayName)
         {
-            MatchResult matchResult = new MatchResult(homeName, awayName);
+            MatchManager matchResult = new MatchManager(homeName, awayName);
 
             Assert.True(matchResult.HomeTeam.Equals(homeName) && matchResult.AwayTeam.Equals(awayName) , "Comprobación de nombres");
         }
@@ -24,7 +24,7 @@ namespace TestScorePanel
         [InlineData(1, 0)]
         public void ComprobacionResultados(int value1, int value2)
         {
-            MatchResult matchResult = new MatchResult("Home", "Away");
+            MatchManager matchResult = new MatchManager("Home", "Away");
 
             matchResult.UpdateScore(value1, value2);
 
