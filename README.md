@@ -1,9 +1,15 @@
 # niniramosTest
-Url del repositorio https://github.com/pakomoto/niniramosTest
+Url of repo https://github.com/pakomoto/niniramosTest
 
-MatchResult
-	Clase que se encarga de controlar el resultado de 1 partido.
+MatchManager
+	Controller class for a match.
+	
+MatchDao
+	Manager of list of matchs
+	
+MatchDaoException
+	Exception class for dao
 
 ScoreManager
-	Clase que se encarga del control de la lista de resultados de los diferentes encuentros.
+	Main controller
 
