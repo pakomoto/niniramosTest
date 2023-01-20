@@ -1,6 +1,7 @@
 using ScorePanel;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Xunit;
 
 namespace TestScorePanel
@@ -29,17 +30,53 @@ namespace TestScorePanel
                 && scoreManager.MatchDao.ListMatchResult[0].HomeTeam == homeName && scoreManager.MatchDao.ListMatchResult[0].AwayTeam == awayName);
         }
 
-        //[Theory]
-        //[InlineData(5, 2)]
-        //[InlineData(3, 4)]
-        //[InlineData(1, 0)]
-        //public void ComprobacionResultados(int value1, int value2)
-        //{
-        //    MatchResult matchResult = new MatchResult("Home", "Away");
+        [Fact]
+        public void TestPrint()
+        {
+            ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
 
-        //    matchResult.UpdateScore(value1, value2);
+            scoreManager.StartGame("Mexico", "Canada");
+            Thread.Sleep(1000);
+            scoreManager.StartGame("Spain", "Brazil");
+            Thread.Sleep(1000);
+            scoreManager.StartGame("Germany", "France");
+            Thread.Sleep(1000);
+            scoreManager.StartGame("Uruguay", "Italy");
+            Thread.Sleep(1000);
+            scoreManager.StartGame("Argentina", "Australia");
 
-        //    Assert.True(matchResult.HomeTeamResult == value1 && matchResult.AwayTeamResult == value2);
-        //}
+            scoreManager.UpdateScore("Mexico", "Canada", 0, 5);
+            scoreManager.UpdateScore("Spain", "Brazil", 10, 2);
+            scoreManager.UpdateScore("Germany", "France", 2, 2);
+            scoreManager.UpdateScore("Uruguay", "Italy", 6, 6);
+            scoreManager.UpdateScore("Argentina", "Australia", 3, 1);
+
+            var list = scoreManager.GetSummary;
+
+            int nPos = 0;
+            foreach(var elemento in list)
+            {
+                switch(nPos)
+                {
+                    case 0:
+                        Assert.Equal("Uruguay 6 - Italy 6", elemento.ToString());
+                        break;
+                    case 1:
+                        Assert.Equal("Spain 10 - Brazil 2", elemento.ToString());
+                        break;
+                    case 2:
+                        Assert.Equal("Mexico 0 - Canada 5", elemento.ToString());
+                        break;
+                    case 3:
+                        Assert.Equal("Argentina 3 - Australia 1", elemento.ToString());
+                        break;
+                    case 4:
+                        Assert.Equal("Germany 2 - France 2", elemento.ToString());
+                        break;
+                }
+
+                nPos += 1;
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace ScorePanel
         {
             get
             {
-                return null;
+                return this.MatchDao.GetSummary;
             }
 
         }

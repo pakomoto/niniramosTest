@@ -5,11 +5,12 @@ namespace ScorePanel
     public class MatchManager
     {
         public string HomeTeam { get; set; }
-        public int HomeTeamResult { get; set; }
+        public int HomeTeamResult { get; private set; }
         public string AwayTeam { get; set; }
-        public int AwayTeamResult { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public int AwayTeamResult { get; private set; }
+        public int TotalResult { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public DateTime? EndDate { get; private set; }
 
         public MatchManager()
         {
@@ -29,11 +30,13 @@ namespace ScorePanel
         {
             this.HomeTeamResult = homeTeam;
             this.AwayTeamResult = awayTeam;
+
+            this.TotalResult = this.HomeTeamResult + this.AwayTeamResult;
         }
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}: {2}-{3}", this.HomeTeam, this.AwayTeam, this.HomeTeamResult, this.AwayTeamResult);
+            return string.Format("{0} {2} - {1} {3}", this.HomeTeam, this.AwayTeam, this.HomeTeamResult, this.AwayTeamResult);
         }
     }
 }

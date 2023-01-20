@@ -10,6 +10,7 @@ namespace ScorePanel
     public class MatchDao
     {
         public List<MatchManager> ListMatchResult { get; set; }
+        
 
         public MatchDao(List<MatchManager> ListMatchResult)
         {
@@ -38,11 +39,18 @@ namespace ScorePanel
 
             if (game != null)
             {
-                game.HomeTeamResult = homeResult;
-                game.AwayTeamResult = awayResult;
+                game.UpdateScore(homeResult, awayResult);
             }
             else
                 throw new MatchDaoException("UpdateScore error, not found value in DB.");
+        }
+
+        public List<MatchManager> GetSummary 
+        {
+            get
+            {
+               return this.ListMatchResult.OrderByDescending(q => q.TotalResult).ThenByDescending(q => q.StartDate).ToList();               
+            }
         }
     }
 }
