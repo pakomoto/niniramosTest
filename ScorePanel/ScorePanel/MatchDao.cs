@@ -7,22 +7,26 @@ using System.Threading.Tasks;
 
 namespace ScorePanel
 {
-    public class MatchDao
+    public class MatchDao : IMatchDao
     {
-        public List<MatchManager> ListMatchResult { get; set; }
-        
+        private List<MatchManager> ListMatchResult { get; set; }
 
         public MatchDao(List<MatchManager> ListMatchResult)
         {
             this.ListMatchResult = ListMatchResult;
         }
 
-        public void StartGame(string home, string away)
+        public MatchManager StartGame(string home, string away)
         {
+            MatchManager matchManager = null;
+
             if (this.ListMatchResult.Exists(q => q.HomeTeam == home && q.AwayTeam == away))
                 throw new MatchDaoException("Value exits in DB.");
 
-            this.ListMatchResult.Add(new MatchManager(home, away));
+            matchManager = new MatchManager(home, away);
+            this.ListMatchResult.Add(matchManager);
+
+            return matchManager;
         }
 
         public void EndGame(MatchManager game)
@@ -35,7 +39,7 @@ namespace ScorePanel
 
         public void UpdateScore(string home, string away, int homeResult, int awayResult)
         {
-            MatchManager game = this.ListMatchResult.Find(q => q.HomeTeam == home && q.AwayTeam == away);
+            IMatchManager game = this.ListMatchResult.Find(q => q.HomeTeam == home && q.AwayTeam == away);
 
             if (game != null)
             {
@@ -45,12 +49,9 @@ namespace ScorePanel
                 throw new MatchDaoException("UpdateScore error, not found value in DB.");
         }
 
-        public List<MatchManager> GetSummary 
+        public List<MatchManager> GetSummary()
         {
-            get
-            {
-               return this.ListMatchResult.OrderByDescending(q => q.TotalResult).ThenByDescending(q => q.StartDate).ToList();               
-            }
+            return this.ListMatchResult.OrderByDescending(q => q.TotalResult).ThenByDescending(q => q.StartDate).ToList();
         }
     }
 }

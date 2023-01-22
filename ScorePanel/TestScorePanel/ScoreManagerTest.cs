@@ -13,7 +13,7 @@ namespace TestScorePanel
         {
             ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
 
-            Assert.True(scoreManager != null && scoreManager.MatchDao.ListMatchResult != null);
+            Assert.True(scoreManager != null && scoreManager.GetSummary != null);
         }
 
         [Theory]
@@ -26,8 +26,22 @@ namespace TestScorePanel
 
             scoreManager.StartGame(homeName, awayName);
 
-            Assert.True(scoreManager != null && scoreManager.MatchDao.ListMatchResult != null && scoreManager.MatchDao.ListMatchResult.Count == 1
-                && scoreManager.MatchDao.ListMatchResult[0].HomeTeam == homeName && scoreManager.MatchDao.ListMatchResult[0].AwayTeam == awayName);
+            Assert.True(scoreManager != null && scoreManager.GetSummary != null && scoreManager.GetSummary.Count == 1
+                && scoreManager.GetSummary[0].HomeTeam == homeName && scoreManager.GetSummary[0].AwayTeam == awayName);
+        }
+
+        [Theory]
+        [InlineData("Sevilla", "Betis")]
+        [InlineData("Sevilla", "Español")]
+        [InlineData("Sevilla", "Barcelona")]
+        public void EndGame(string homeName, string awayName)
+        {
+            ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
+
+            MatchManager match = scoreManager.StartGame(homeName, awayName);
+            scoreManager.EndGame(match);
+
+            Assert.True(scoreManager != null && scoreManager.GetSummary != null && scoreManager.GetSummary.Count == 0);
         }
 
         [Fact]
@@ -36,13 +50,9 @@ namespace TestScorePanel
             ScoreManager scoreManager = new ScoreManager(new MatchDao(new List<MatchManager>()));
 
             scoreManager.StartGame("Mexico", "Canada");
-            Thread.Sleep(1000);
             scoreManager.StartGame("Spain", "Brazil");
-            Thread.Sleep(1000);
             scoreManager.StartGame("Germany", "France");
-            Thread.Sleep(1000);
             scoreManager.StartGame("Uruguay", "Italy");
-            Thread.Sleep(1000);
             scoreManager.StartGame("Argentina", "Australia");
 
             scoreManager.UpdateScore("Mexico", "Canada", 0, 5);

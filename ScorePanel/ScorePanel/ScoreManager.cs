@@ -9,18 +9,18 @@ namespace ScorePanel
 {
     public class ScoreManager
     {
-        public MatchDao MatchDao { get; set; }
+        public IMatchDao MatchDao { get; set; }
 
-        public ScoreManager(MatchDao MatchDao)
+        public ScoreManager(IMatchDao MatchDao)
         {
             this.MatchDao = MatchDao;
         }
 
-        public void StartGame(string home, string away)
+        public MatchManager StartGame(string home, string away)
         {
             try
             {
-                this.MatchDao.StartGame(home, away);
+                return this.MatchDao.StartGame(home, away);
             }
             catch (MatchDaoException mex)
             {
@@ -56,7 +56,7 @@ namespace ScorePanel
         {
             get
             {
-                return this.MatchDao.GetSummary;
+                return this.MatchDao.GetSummary();
             }
 
         }
